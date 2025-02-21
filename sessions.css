@@ -51,6 +51,7 @@ body {
 #sidebarCollections {
   flex: 1;
   overflow-y: auto;
+  overflow-x: hidden; /* Add this to prevent horizontal scroll */
   margin-bottom: 20px;
 }
 
@@ -66,6 +67,8 @@ body {
   color: #e0e0e0;
   transition: all 0.2s ease;
   position: relative;
+  width: 100%; /* Add this to ensure proper width */
+  box-sizing: border-box; /* Add this to include padding in width calculation */
 }
 
 /* Optional icons for each collection item */
@@ -85,6 +88,16 @@ body {
 }
 .collection-item.active:before {
   content: "📂";
+}
+
+.collection-name {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  overflow: hidden; /* Add this to prevent text overflow */
+  white-space: nowrap; /* Keep text on single line */
+  text-overflow: ellipsis; /* Add ellipsis for long text */
+  flex: 1; /* Take available space */
 }
 
 /* "New Collection" button */
