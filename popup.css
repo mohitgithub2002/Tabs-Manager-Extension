@@ -168,6 +168,60 @@ header h1 {
   color: white;
 }
 
+#newCollectionForm {
+  margin: 12px 0;
+  padding: 12px;
+  background: var(--surface-2);
+  border-radius: 8px;
+  border: 1px solid var(--primary-light);
+}
+
+#newCollectionForm.hidden {
+  display: none;
+}
+
+#newCollectionInput {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  margin-bottom: 8px;
+  font-size: 14px;
+}
+
+.form-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.form-buttons button {
+  flex: 1;
+  padding: 8px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+#saveCollectionBtn {
+  background: var(--primary);
+  color: white;
+}
+
+#saveCollectionBtn:hover {
+  background: var(--primary-dark);
+}
+
+#cancelCollectionBtn {
+  background: var(--surface);
+  border: 1px solid #e2e8f0;
+}
+
+#cancelCollectionBtn:hover {
+  background: #e2e8f0;
+}
+
 /* Custom scrollbar */
 ::-webkit-scrollbar {
   width: 8px;

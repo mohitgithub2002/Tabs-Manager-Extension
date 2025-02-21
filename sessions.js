@@ -258,9 +258,19 @@ document.addEventListener("DOMContentLoaded", () => {
   // Render the collections in the sidebar
   renderCollectionsList();
 
-  // Handle "New Collection" button
+  // Replace the old "New Collection" button handler with these new handlers
   document.getElementById("newCollectionBtn").addEventListener("click", () => {
-    const name = prompt("Enter collection name:");
+    const form = document.getElementById("newCollectionForm");
+    const input = document.getElementById("newCollectionInput");
+    form.classList.remove("hidden");
+    input.focus();
+  });
+
+  document.getElementById("saveCollectionBtn").addEventListener("click", () => {
+    const input = document.getElementById("newCollectionInput");
+    const form = document.getElementById("newCollectionForm");
+    const name = input.value.trim();
+    
     if (name) {
       chrome.storage.local.get("collections", (data) => {
         const collections = data.collections || [];
@@ -270,10 +280,25 @@ document.addEventListener("DOMContentLoaded", () => {
           sessions: []
         });
         chrome.storage.local.set({ collections }, () => {
-          // Reload to refresh sidebar
-          location.reload();
+          renderCollectionsList();
+          form.classList.add("hidden");
+          input.value = "";
         });
       });
+    }
+  });
+
+  document.getElementById("cancelCollectionBtn").addEventListener("click", () => {
+    const form = document.getElementById("newCollectionForm");
+    const input = document.getElementById("newCollectionInput");
+    form.classList.add("hidden");
+    input.value = "";
+  });
+
+  // Add Enter key support for the input
+  document.getElementById("newCollectionInput").addEventListener("keypress", (e) => {
+    if (e.key === "Enter") {
+      document.getElementById("saveCollectionBtn").click();
     }
   });
 });

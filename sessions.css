@@ -363,3 +363,60 @@ body {
 #sessionsList::-webkit-scrollbar-thumb:hover {
   background: rgba(255, 255, 255, 0.3);
 }
+
+/* New Collection Form */
+.new-collection-form {
+  margin: 8px 0;
+  padding: 12px;
+  background-color: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.new-collection-form.hidden {
+  display: none;
+}
+
+.new-collection-form input {
+  width: 100%;
+  padding: 8px 12px;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  color: white;
+  margin-bottom: 8px;
+  font-size: 14px;
+}
+
+.new-collection-form .form-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.new-collection-form button {
+  flex: 1;
+  padding: 8px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s ease;
+}
+
+.new-collection-form #saveCollectionBtn {
+  background: #2196f3;
+  color: white;
+}
+
+.new-collection-form #saveCollectionBtn:hover {
+  background: #1976d2;
+}
+
+.new-collection-form #cancelCollectionBtn {
+  background: rgba(255, 255, 255, 0.1);
+  color: #e0e0e0;
+}
+
+.new-collection-form #cancelCollectionBtn:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
