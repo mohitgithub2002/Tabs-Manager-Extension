@@ -35,7 +35,8 @@ function renderSessions(sessions) {
   
       const sessionDate = document.createElement("div");
       sessionDate.className = "session-date";
-      sessionDate.textContent = session.timestamp || "Unknown Date";
+      // Add indicator if it's a single saved tab
+      sessionDate.textContent = `${session.timestamp} ${session.isSingleTab ? '(Single Tab)' : ''}`;
   
       // Add date/time to the header
       sessionHeader.appendChild(sessionDate);
@@ -98,6 +99,30 @@ function renderSessions(sessions) {
     });
   }
   
+function renderCollectionsList() {
+  chrome.storage.local.get("collections", (data) => {
+    const collections = data.collections || [];
+    const sidebarCollections = document.getElementById("sidebarCollections");
+    
+    collections.forEach(collection => {
+      const div = document.createElement("div");
+      div.className = "collection-item";
+      div.textContent = collection.name;
+      div.dataset.id = collection.id;
+      
+      div.addEventListener("click", () => {
+        document.querySelectorAll(".collection-item").forEach(item => {
+          item.classList.remove("active");
+        });
+        div.classList.add("active");
+        renderSessions(collection.sessions || []);
+      });
+      
+      sidebarCollections.appendChild(div);
+    });
+  });
+}
+
   document.addEventListener("DOMContentLoaded", () => {
     // Load username from storage
     chrome.storage.local.get("username", (data) => {
@@ -137,6 +162,26 @@ function renderSessions(sessions) {
     nameInput.addEventListener("keypress", (e) => {
       if (e.key === "Enter") {
         saveNameBtn.click();
+      }
+    });
+
+    renderCollectionsList();
+  
+    // Add new collection button handler
+    document.getElementById("newCollectionBtn").addEventListener("click", () => {
+      const name = prompt("Enter collection name:");
+      if (name) {
+        chrome.storage.local.get("collections", (data) => {
+          const collections = data.collections || [];
+          collections.push({
+            id: Date.now().toString(),
+            name,
+            sessions: []
+          });
+          chrome.storage.local.set({ collections }, () => {
+            location.reload();
+          });
+        });
       }
     });
   });

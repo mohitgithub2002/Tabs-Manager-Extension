@@ -220,3 +220,38 @@
   #saveNameBtn:hover {
     background-color: #1976d2;
   }
+
+  .layout {
+    display: flex;
+    gap: 20px;
+    height: 100vh;
+  }
+  
+  .collections-sidebar {
+    width: 250px;
+    background-color: rgba(42, 42, 42, 0.7);
+    padding: 20px;
+    border-radius: 12px;
+    height: fit-content;
+    position: sticky;
+    top: 20px;
+  }
+  
+  .collection-item {
+    padding: 10px;
+    margin: 5px 0;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+  
+  .collection-item:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+  
+  .collection-item.active {
+    background-color: rgba(255, 255, 255, 0.15);
+  }
+  
+  .main-content {
+    flex: 1;
+  }

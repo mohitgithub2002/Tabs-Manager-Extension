@@ -10,21 +10,37 @@
   <link rel="stylesheet" href="sessions.css">
 </head>
 <body>
-  <header>
-    <h1>Revenuelogy Tabs Collection</h1>
-    <div class="user-section">
-      <span id="displayName">Guest</span>
-      <button id="editNameBtn" class="edit-name-btn">✎</button>
-      <div id="nameEditContainer" class="name-edit-container hidden">
-        <input type="text" id="nameInput" placeholder="Enter your name">
-        <button id="saveNameBtn">Save</button>
+  <div class="layout">
+    <!-- Sidebar for collections -->
+    <aside class="collections-sidebar">
+      <h2>Collections</h2>
+      <div id="sidebarCollections">
+        <div class="collection-item active" data-id="default">
+          Default Collection
+        </div>
+        <!-- Other collections will be rendered here -->
       </div>
-    </div>
-  </header>
+      <button id="newCollectionBtn">+ New Collection</button>
+    </aside>
 
-  <!-- Container where sessions will be rendered by sessions.js -->
-  <div id="sessionsList"></div>
+    <!-- Main content -->
+    <main class="main-content">
+      <header>
+        <h1>Revenuelogy Tabs Collection</h1>
+        <div class="user-section">
+          <span id="displayName">Guest</span>
+          <button id="editNameBtn" class="edit-name-btn">✎</button>
+          <div id="nameEditContainer" class="name-edit-container hidden">
+            <input type="text" id="nameInput" placeholder="Enter your name">
+            <button id="saveNameBtn">Save</button>
+          </div>
+        </div>
+      </header>
 
+      <!-- Container where sessions will be rendered by sessions.js -->
+      <div id="sessionsList"></div>
+    </main>
+  </div>
   <!-- Link to the JavaScript file -->
   <script src="sessions.js"></script>
 </body>
