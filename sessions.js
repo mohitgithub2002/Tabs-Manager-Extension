@@ -20,8 +20,13 @@ function renderSessions(sessions, collectionId = 'default') {
     return;
   }
 
+  // Sort sessions by timestamp in descending order (latest first)
+  const sortedSessions = [...sessions].sort((a, b) => {
+    return new Date(b.timestamp) - new Date(a.timestamp);
+  });
+
   // Loop through each session object
-  sessions.forEach((session) => {
+  sortedSessions.forEach((session) => {
     // session = { timestamp: string, tabs: [ { title, url }, ... ] }
 
     // Create a container for this session group
