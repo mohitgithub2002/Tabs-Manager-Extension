@@ -92,16 +92,25 @@ function saveSessionToCollection(collectionId) {
 
 function saveToCollection(collectionId, session) {
   chrome.storage.local.get(["collections", "sessions"], (data) => {
-    const collections = data.collections || [];
-    const collection = collections.find(c => c.id === collectionId) || 
-                      { id: 'default', sessions: [] };
-    
-    collection.sessions = collection.sessions || [];
-    collection.sessions.push(session);
-    
-    chrome.storage.local.set({ collections }, () => {
-      alert("Saved to collection!");
-    });
+    if (collectionId === "default") {
+      // Handle default collection in sessions array
+      const sessions = data.sessions || [];
+      sessions.push(session);
+      chrome.storage.local.set({ sessions }, () => {
+        alert("Saved to Default Collection!");
+      });
+    } else {
+      // Handle other collections
+      const collections = data.collections || [];
+      const collection = collections.find(c => c.id === collectionId);
+      if (collection) {
+        collection.sessions = collection.sessions || [];
+        collection.sessions.push(session);
+        chrome.storage.local.set({ collections }, () => {
+          alert("Saved to collection!");
+        });
+      }
+    }
   });
 }
 

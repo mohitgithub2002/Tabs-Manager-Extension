@@ -15,4 +15,17 @@ chrome.tabs.onCreated.addListener((tab) => {
       console.log("Tab updated:", tab);
     }
   });
-  
+
+// Add installation handler
+chrome.runtime.onInstalled.addListener((details) => {
+  if (details.reason === "install") {
+    // Initialize storage with empty arrays
+    chrome.storage.local.set({
+      sessions: [],
+      collections: [], // Remove default collection from here
+      username: 'Guest'
+    }, () => {
+      console.log('Storage initialized');
+    });
+  }
+});

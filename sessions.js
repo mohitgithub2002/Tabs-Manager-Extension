@@ -156,11 +156,10 @@ function renderSessions(sessions, collectionId = 'default') {
  */
 function renderCollectionsList() {
   chrome.storage.local.get(["collections", "sessions"], (data) => {
-    const collections = data.collections || [];
+    const collections = (data.collections || []).filter(c => c.id !== 'default'); // Filter out any default collection
     const sessions = data.sessions || [];
     const sidebarCollections = document.getElementById("sidebarCollections");
     
-    // Clear existing content
     sidebarCollections.innerHTML = "";
     
     // Add default collection first
@@ -174,12 +173,12 @@ function renderCollectionsList() {
         item.classList.remove("active");
       });
       defaultDiv.classList.add("active");
-      renderSessions(sessions); // Render default sessions
+      renderSessions(sessions);
     });
     
     sidebarCollections.appendChild(defaultDiv);
     
-    // Render other collections
+    // Render other collections (excluding default)
     collections.forEach(collection => {
       const div = document.createElement("div");
       div.className = "collection-item";
