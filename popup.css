@@ -1,91 +1,224 @@
 /* popup.css */
 
+:root {
+  --primary: #4f46e5;
+  --primary-light: #6366f1;
+  --primary-dark: #4338ca;
+  --secondary: #0ea5e9;
+  --secondary-light: #38bdf8;
+  --background: #ffffff;
+  --surface: #f8fafc;
+  --surface-2: #f1f5f9;
+  --text: #0f172a;
+  --text-light: #64748b;
+  --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+}
+
 body {
-    font-family: Arial, sans-serif;
-    width: 300px;
-    margin: 0;
-    padding: 10px;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  width: 360px;
+  margin: 0;
+  padding: 16px;
+  background: var(--background);
+  color: var(--text);
 }
-  
+
+header {
+  margin-bottom: 24px;
+  text-align: center;
+}
+
 header h1 {
-    text-align: center;
-    font-size: 1.5em;
-    margin-bottom: 10px;
+  margin-bottom: 16px;
+  background: linear-gradient(to right, var(--primary), var(--secondary));
+  -webkit-background-clip: text;
+  color: transparent;
+  font-weight: 800;
 }
-  
+
 #controls {
-    display: flex;
-    justify-content: space-around;
-    margin-bottom: 10px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-bottom: 20px;
 }
-  
+
 #controls button {
-    flex: 1;
-    margin: 0 2px;
-    padding: 5px;
-    font-size: 0.9em;
+  padding: 8px 12px;
+  font-size: 0.9em;
+  border: none;
+  border-radius: 8px;
+  background: white;
+  border: 1px solid #e2e8f0;
+  color: var(--text);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: var(--shadow);
+  font-weight: 500;
 }
-  
+
+#controls button:hover {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: white;
+  transform: translateY(-1px);
+}
+
 #tabList {
-    max-height: 300px;
-    overflow-y: auto;
-    border-top: 1px solid #ddd;
-    padding-top: 5px;
+  max-height: 400px;
+  overflow-y: auto;
+  border-radius: 12px;
+  background: var(--surface);
+  padding: 8px;
+  box-shadow: var(--shadow);
 }
-  
+
 .tab-item {
-    padding: 5px;
-    border-bottom: 1px solid #ccc;
-    cursor: pointer;
+  padding: 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-bottom: 8px;
+  background: white;
+  transition: all 0.2s ease;
+  border: 1px solid #e2e8f0;
 }
-  
+
 .tab-item:hover {
-    background-color: #f0f0f0;
+  background: var(--primary-light);
+  color: white;
+  transform: translateX(4px);
 }
 
 #collections {
-  margin-bottom: 15px;
-  border-bottom: 1px solid #ddd;
-  padding-bottom: 10px;
+  margin-top: 24px;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+}
+
+#collections h2 {
+  font-size: 0.9em;
+  text-transform: uppercase;
+  color: var(--text-light);
+  margin-bottom: 12px;
+  letter-spacing: 0.05em;
 }
 
 .collection-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 8px;
-  border-radius: 4px;
-  margin-bottom: 4px;
+  padding: 14px;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  background: var(--surface-2);
+  box-shadow: var(--shadow);
+  border: 1px solid #e2e8f0;
+  transition: all 0.2s ease;
 }
 
 .collection-item:hover {
-  background-color: #f0f0f0;
+  transform: translateY(-2px);
+  background: white;
+  border-color: var(--primary-light);
+  box-shadow: 0 6px 8px -1px rgb(0 0 0 / 0.1);
 }
 
 .collection-item .actions {
   display: flex;
-  gap: 5px;
+  gap: 8px;
 }
 
 .actions button {
-  background: none;
-  border: none;
+  color: var(--primary);
+  background: white;
+  border: 1px solid #e2e8f0;
   cursor: pointer;
   font-size: 16px;
-  padding: 4px;
-  border-radius: 4px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  transition: all 0.2s ease;
 }
 
 .actions button:hover {
-  background-color: #e0e0e0;
+  background: var(--primary);
+  border-color: var(--primary);
+  color: white;
+  transform: scale(1.1);
 }
 
 #newCollectionBtn {
   width: 100%;
-  padding: 8px;
-  margin-top: 8px;
-  background-color: #f0f0f0;
-  border: 1px solid #ddd;
-  border-radius: 4px;
+  padding: 12px;
+  margin-top: 12px;
+  background: var(--surface-2);
+  color: var(--primary);
+  border: 2px dashed var(--primary-light);
+  border-radius: 8px;
   cursor: pointer;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+#newCollectionBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+  background: var(--primary);
+  border-style: solid;
+  color: white;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--surface);
+  border-radius: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--primary-light);
+  border-radius: 8px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--primary);
+}
+
+.collections-main-btn {
+  width: 100%;
+  padding: 16px;
+  background: var(--primary);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 1.1em;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: all 0.3s ease;
+  box-shadow: var(--shadow);
+}
+
+.collections-main-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+  background: var(--primary-dark);
+}
+
+.collections-main-btn .icon {
+  font-size: 1.2em;
+}
+
+.collections-main-btn .arrow {
+  font-size: 1.2em;
+  transition: transform 0.3s ease;
+}
+
+.collections-main-btn:hover .arrow {
+  transform: translateX(4px);
 }

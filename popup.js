@@ -2,26 +2,26 @@
 
 // ----- TAB MANAGEMENT FUNCTIONS -----
 
-function renderTabs(tabs) {
-  const tabList = document.getElementById("tabList");
-  tabList.innerHTML = "";
-  tabs.forEach((tab) => {
-    const div = document.createElement("div");
-    div.className = "tab-item";
-    div.textContent = tab.title || tab.url;
-    div.addEventListener("click", () => {
-      chrome.tabs.update(tab.id, { active: true });
-      chrome.windows.update(tab.windowId, { focused: true });
-    });
-    tabList.appendChild(div);
-  });
-}
+// function renderTabs(tabs) {
+//   const tabList = document.getElementById("tabList");
+//   tabList.innerHTML = "";
+//   tabs.forEach((tab) => {
+//     const div = document.createElement("div");
+//     div.className = "tab-item";
+//     div.textContent = tab.title || tab.url;
+//     div.addEventListener("click", () => {
+//       chrome.tabs.update(tab.id, { active: true });
+//       chrome.windows.update(tab.windowId, { focused: true });
+//     });
+//     tabList.appendChild(div);
+//   });
+// }
 
-function loadTabs() {
-  chrome.tabs.query({ currentWindow: true }, (tabs) => {
-    renderTabs(tabs);
-  });
-}
+// function loadTabs() {
+//   chrome.tabs.query({ currentWindow: true }, (tabs) => {
+//     renderTabs(tabs);
+//   });
+// }
 
 // Add this at the top with other functions
 
@@ -37,7 +37,7 @@ function renderCollections() {
       div.innerHTML = `
         <span>${collection.name}</span>
         <div class="actions">
-          <button class="save-tab-btn" title="Save Tab">📑</button>
+          <button class="save-tab-btn" title="Save Tab">💾</button>
           <button class="save-session-btn" title="Save Session">📚</button>
         </div>
       `;
@@ -112,7 +112,7 @@ function saveToCollection(collectionId, session) {
 
 document.addEventListener("DOMContentLoaded", () => {
   // Initialize
-  loadTabs();
+  // loadTabs();
   renderCollections();
 
   // Attach event listeners
@@ -212,5 +212,10 @@ document.addEventListener("DOMContentLoaded", () => {
         });
       });
     }
+  });
+
+  // Add new collection button handler
+  addListener("openCollectionsBtn", () => {
+    window.open("sessions.html");
   });
 });

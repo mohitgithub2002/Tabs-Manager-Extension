@@ -3,41 +3,38 @@
   <head>
     <meta charset="UTF-8" />
     <title>Personal Tab Manager</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
     <link rel="stylesheet" href="popup.css" />
   </head>
   <body>
     <header>
-      <h1>My Tab Manager</h1>
+      <h1>Tab Manager</h1>
+      <button id="openCollectionsBtn" class="collections-main-btn">
+        <span class="icon">📑</span>
+        <span class="text">Open Collections</span>
+        <span class="arrow">→</span>
+      </button>
     </header>
     
     <!-- Collections List -->
     <section id="collections">
+      <h2 style="font-size: large; color: rgb(14, 11, 11);" >Quick Save</h2>
       <div class="collection-item default">
         <span>Default Collection</span>
         <div class="actions">
-          <button id="defaultSaveTab" class="save-tab-btn" title="Save Tab">📑</button>
+          <button id="defaultSaveTab" class="save-tab-btn" title="Save Tab">💾</button>
           <button id="defaultSaveSession" class="save-session-btn" title="Save Session">📚</button>
         </div>
       </div>
       <div id="collectionsList">
         <!-- Other collections will be rendered here -->
       </div>
-      <button id="newCollectionBtn">+ New Collection</button>
+      <button id="newCollectionBtn">+ Create New Collection</button>
     </section>
 
-    <!-- Control Buttons -->
-    <section id="controls">
-       <button id="saveTab">Save Tab</button>
-      <button id="saveSession">Save Session</button>
-      <button id="restoreSession">Restore Last</button>
-      <button id="viewSessions">View All</button>
-      <button id="groupTabs">Group Tabs</button>
-    </section>
     
-    <!-- Tab List Section -->
-    <section id="tabList">
-      <!-- Open tabs will be rendered here -->
-    </section>
+    
+    
     
     <script src="popup.js"></script>
   </body>
