@@ -228,6 +228,7 @@ body {
 .session-header {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 15px;
   margin-bottom: 10px;
 }
@@ -238,7 +239,14 @@ body {
   color: #ffffff;
 }
 
-/* "Restore" button in session header */
+/* Add new container for buttons */
+.session-actions {
+  display: flex;
+  gap: 8px;
+  margin-left: auto;
+}
+
+/* Update restore button - remove margin-left: auto */
 .restore-btn {
   background-color: #2196f3;
   color: #fff;
@@ -251,10 +259,22 @@ body {
   box-shadow: 0 2px 4px rgba(33, 150, 243, 0.3);
   transition: all 0.2s ease;
 }
-.restore-btn:hover {
-  background-color: #1976d2;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 8px rgba(33, 150, 243, 0.4);
+
+/* Update delete button - remove margin-left: auto */
+.delete-btn {
+  background-color: #ff4444;
+  color: #fff;
+  border: none;
+  padding: 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  font-weight: bold;
+  box-shadow: 0 2px 4px rgba(255, 68, 68, 0.3);
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 /* Tabs container within each session */

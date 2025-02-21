@@ -7,7 +7,7 @@
  *  - A "Restore" button
  *  - A grid of tab cards (title + link)
  */
-function renderSessions(sessions) {
+function renderSessions(sessions, collectionId = 'default') {
   const sessionsList = document.getElementById("sessionsList");
   sessionsList.innerHTML = "";
 
@@ -38,6 +38,10 @@ function renderSessions(sessions) {
     sessionDate.textContent = session.timestamp || "Unknown Date";
     sessionHeader.appendChild(sessionDate);
 
+    // Create container for buttons
+    const sessionActions = document.createElement("div");
+    sessionActions.className = "session-actions";
+
     // "Restore" button
     const restoreBtn = document.createElement("button");
     restoreBtn.className = "restore-btn";
@@ -48,7 +52,46 @@ function renderSessions(sessions) {
         chrome.tabs.create({ url: tabData.url });
       });
     });
-    sessionHeader.appendChild(restoreBtn);
+    sessionActions.appendChild(restoreBtn);
+
+    // Add delete button
+    const deleteBtn = document.createElement("button");
+    deleteBtn.className = "delete-btn";
+    deleteBtn.innerHTML = "✕";
+    deleteBtn.title = "Delete Session";
+    deleteBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      if (confirm("Are you sure you want to delete this session?")) {
+        // Handle deletion based on whether it's in default or a collection
+        if (collectionId === 'default') {
+          chrome.storage.local.get("sessions", (data) => {
+            const updatedSessions = data.sessions.filter(s => 
+              s.timestamp !== session.timestamp
+            );
+            chrome.storage.local.set({ sessions: updatedSessions }, () => {
+              renderSessions(updatedSessions);
+            });
+          });
+        } else {
+          chrome.storage.local.get("collections", (data) => {
+            const collections = data.collections || [];
+            const collection = collections.find(c => c.id === collectionId);
+            if (collection) {
+              collection.sessions = collection.sessions.filter(s => 
+                s.timestamp !== session.timestamp
+              );
+              chrome.storage.local.set({ collections }, () => {
+                renderSessions(collection.sessions, collectionId);
+              });
+            }
+          });
+        }
+      }
+    });
+    sessionActions.appendChild(deleteBtn);
+
+    // Add the actions container to header
+    sessionHeader.appendChild(sessionActions);
 
     // Add the header to the session group
     sessionGroup.appendChild(sessionHeader);
@@ -143,7 +186,7 @@ function renderCollectionsList() {
           item.classList.remove("active");
         });
         div.classList.add("active");
-        renderSessions(collection.sessions || []);
+        renderSessions(collection.sessions || [], collection.id);
       });
       
       sidebarCollections.appendChild(div);

@@ -82,6 +82,11 @@ function saveSessionToCollection(collectionId) {
     };
     
     saveToCollection(collectionId, session);
+    
+    // Close all tabs after saving
+    tabs.forEach(tab => {
+      chrome.tabs.remove(tab.id);
+    });
   });
 }
 
@@ -163,6 +168,10 @@ document.addEventListener("DOMContentLoaded", () => {
         const sessions = data.sessions || [];
         sessions.push(session);
         chrome.storage.local.set({ sessions }, () => {
+          // Close all tabs after saving
+          tabs.forEach(tab => {
+            chrome.tabs.remove(tab.id);
+          });
           alert("Session saved!");
         });
       });
