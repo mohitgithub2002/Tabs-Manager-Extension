@@ -25,7 +25,6 @@ function loadTabs() {
 
 // ----- SESSION MANAGEMENT -----
 
-// Save the current session along with the current time.
 document.getElementById("saveSession").addEventListener("click", () => {
   chrome.tabs.query({ currentWindow: true }, (tabs) => {
     const session = {
@@ -45,7 +44,6 @@ document.getElementById("saveSession").addEventListener("click", () => {
   });
 });
 
-// Restore the most recently saved session.
 document.getElementById("restoreSession").addEventListener("click", () => {
   chrome.storage.local.get("sessions", (data) => {
     const sessions = data.sessions || [];
@@ -53,7 +51,6 @@ document.getElementById("restoreSession").addEventListener("click", () => {
       alert("No saved sessions found.");
       return;
     }
-    // Restore the last session saved.
     const lastSession = sessions[sessions.length - 1];
     lastSession.tabs.forEach((tabData) => {
       chrome.tabs.create({ url: tabData.url });
@@ -73,62 +70,6 @@ document.getElementById("groupTabs").addEventListener("click", () => {
   });
 });
 
-// ----- SEARCH FUNCTIONALITY -----
-
-document.getElementById("searchInput").addEventListener("input", (e) => {
-  const query = e.target.value.toLowerCase();
-  chrome.tabs.query({ currentWindow: true }, (tabs) => {
-    const filtered = tabs.filter((tab) =>
-      (tab.title && tab.title.toLowerCase().includes(query)) ||
-      (tab.url && tab.url.toLowerCase().includes(query))
-    );
-    renderTabs(filtered);
-  });
-});
-
-// ----- CUSTOM SHORTCUTS -----
-
-function renderShortcuts(shortcuts) {
-  const shortcutList = document.getElementById("shortcutList");
-  shortcutList.innerHTML = "";
-  shortcuts.forEach((shortcut) => {
-    const div = document.createElement("div");
-    div.className = "shortcut-item";
-    div.textContent = shortcut.name;
-    div.addEventListener("click", () => {
-      chrome.tabs.create({ url: shortcut.url });
-    });
-    shortcutList.appendChild(div);
-  });
-}
-
-function loadShortcuts() {
-  chrome.storage.local.get("shortcuts", (data) => {
-    const shortcuts = data.shortcuts || [];
-    renderShortcuts(shortcuts);
-  });
-}
-
-document.getElementById("addShortcut").addEventListener("click", () => {
-  const nameInput = document.getElementById("shortcutName");
-  const urlInput = document.getElementById("shortcutURL");
-  const name = nameInput.value.trim();
-  const url = urlInput.value.trim();
-  if (name && url) {
-    chrome.storage.local.get("shortcuts", (data) => {
-      const shortcuts = data.shortcuts || [];
-      shortcuts.push({ name, url });
-      chrome.storage.local.set({ shortcuts: shortcuts }, () => {
-        renderShortcuts(shortcuts);
-        nameInput.value = "";
-        urlInput.value = "";
-      });
-    });
-  } else {
-    alert("Please enter both a name and a URL for the shortcut.");
-  }
-});
-
 // ----- VIEW SAVED SESSIONS BUTTON -----
 
 document.getElementById("viewSessions").addEventListener("click", () => {
@@ -139,5 +80,4 @@ document.getElementById("viewSessions").addEventListener("click", () => {
 
 document.addEventListener("DOMContentLoaded", () => {
   loadTabs();
-  loadShortcuts();
 });

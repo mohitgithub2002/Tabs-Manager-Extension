@@ -5,76 +5,40 @@ body {
     width: 300px;
     margin: 0;
     padding: 10px;
-  }
+}
   
-  header h1 {
+header h1 {
     text-align: center;
     font-size: 1.5em;
     margin-bottom: 10px;
-  }
+}
   
-  #controls {
+#controls {
     display: flex;
     justify-content: space-around;
     margin-bottom: 10px;
-  }
+}
   
-  #controls button {
+#controls button {
     flex: 1;
     margin: 0 2px;
     padding: 5px;
     font-size: 0.9em;
-  }
+}
   
-  #shortcuts {
-    margin-bottom: 10px;
-  }
-  
-  #shortcuts input {
-    width: 90%;
-    margin: 2px 0;
-    padding: 5px;
-    box-sizing: border-box;
-  }
-  
-  #shortcuts button {
-    width: 100%;
-    padding: 5px;
-    font-size: 0.9em;
-  }
-  
-  #searchSection {
-    margin-bottom: 10px;
-  }
-  
-  #searchInput {
-    width: 100%;
-    padding: 5px;
-    box-sizing: border-box;
-  }
-  
-  #tabList {
+#tabList {
     max-height: 300px;
     overflow-y: auto;
     border-top: 1px solid #ddd;
     padding-top: 5px;
-  }
+}
   
-  .tab-item {
+.tab-item {
     padding: 5px;
     border-bottom: 1px solid #ccc;
     cursor: pointer;
-  }
+}
   
-  .tab-item:hover {
+.tab-item:hover {
     background-color: #f0f0f0;
-  }
-  
-  .shortcut-item {
-    padding: 5px;
-    border: 1px solid #aaa;
-    margin: 2px 0;
-    cursor: pointer;
-    background-color: #e0e0e0;
-  }
-  
+}
