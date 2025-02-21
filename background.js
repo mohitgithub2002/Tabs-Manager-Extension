@@ -1,5 +1,28 @@
 // background.js
 
+// Add startup handler
+chrome.runtime.onStartup.addListener(() => {
+  // Get the extension URL for sessions.html
+  const sessionsUrl = chrome.runtime.getURL('sessions.html');
+  
+  // Create a new tab with sessions.html
+  chrome.tabs.create({
+    url: sessionsUrl,
+    active: true
+  });
+});
+
+// Add tab event listeners
+chrome.tabs.onCreated.addListener((tab) => {
+  const sessionsUrl = chrome.runtime.getURL('sessions.html');
+  if (tab.pendingUrl === 'chrome://newtab/' || tab.url === 'chrome://newtab/') {
+    chrome.tabs.update(tab.id, { url: sessionsUrl });
+  }
+  console.log("Tab created:", tab);
+  // You can add additional logic here to update sessions automatically.
+});
+
+// Add tab event listeners
 chrome.tabs.onCreated.addListener((tab) => {
     console.log("Tab created:", tab);
     // You can add additional logic here to update sessions automatically.
