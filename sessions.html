@@ -3,9 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <title>My Collections</title>
+  <!-- Google Fonts: Inter -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap"
+    rel="stylesheet"
+  >
   <!-- Link to the CSS file -->
   <link rel="stylesheet" href="sessions.css">
 </head>
@@ -15,15 +19,12 @@
     <aside class="collections-sidebar">
       <h2>Collections</h2>
       <div id="sidebarCollections">
-        <div class="collection-item active" data-id="default">
-          Default Collection
-        </div>
-        <!-- Other collections will be rendered here -->
+        <!-- Collections are dynamically rendered here by sessions.js -->
       </div>
       <button id="newCollectionBtn">New Collection</button>
     </aside>
 
-    <!-- Main content -->
+    <!-- Main content area -->
     <main class="main-content">
       <header>
         <h1>Revenuelogy Tabs Collection</h1>
@@ -41,6 +42,7 @@
       <div id="sessionsList"></div>
     </main>
   </div>
+  
   <!-- Link to the JavaScript file -->
   <script src="sessions.js"></script>
 </body>
