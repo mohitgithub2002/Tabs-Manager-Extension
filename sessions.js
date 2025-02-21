@@ -67,30 +67,18 @@ function renderSessions(sessions, collectionId = 'default') {
     deleteBtn.addEventListener("click", (e) => {
       e.stopPropagation();
       if (confirm("Are you sure you want to delete this session?")) {
-        // Handle deletion based on whether it's in default or a collection
-        if (collectionId === 'default') {
-          chrome.storage.local.get("sessions", (data) => {
-            const updatedSessions = data.sessions.filter(s => 
+        chrome.storage.local.get("collections", (data) => {
+          const collections = data.collections || [];
+          const collection = collections.find(c => c.id === collectionId);
+          if (collection) {
+            collection.sessions = collection.sessions.filter(s => 
               s.timestamp !== session.timestamp
             );
-            chrome.storage.local.set({ sessions: updatedSessions }, () => {
-              renderSessions(updatedSessions);
+            chrome.storage.local.set({ collections }, () => {
+              renderSessions(collection.sessions, collectionId);
             });
-          });
-        } else {
-          chrome.storage.local.get("collections", (data) => {
-            const collections = data.collections || [];
-            const collection = collections.find(c => c.id === collectionId);
-            if (collection) {
-              collection.sessions = collection.sessions.filter(s => 
-                s.timestamp !== session.timestamp
-              );
-              chrome.storage.local.set({ collections }, () => {
-                renderSessions(collection.sessions, collectionId);
-              });
-            }
-          });
-        }
+          }
+        });
       }
     });
     sessionActions.appendChild(deleteBtn);
@@ -174,9 +162,9 @@ function renderSessions(sessions, collectionId = 'default') {
  * Renders the collections list in the sidebar
  */
 function renderCollectionsList() {
-  chrome.storage.local.get(["collections", "sessions"], (data) => {
-    const collections = (data.collections || []).filter(c => c.id !== 'default'); // Filter out any default collection
-    const sessions = data.sessions || [];
+  chrome.storage.local.get("collections", (data) => {
+    const collections = data.collections || [];
+    const defaultCollection = collections.find(c => c.id === 'default') || { sessions: [] };
     const sidebarCollections = document.getElementById("sidebarCollections");
     
     sidebarCollections.innerHTML = "";
@@ -192,13 +180,13 @@ function renderCollectionsList() {
         item.classList.remove("active");
       });
       defaultDiv.classList.add("active");
-      renderSessions(sessions);
+      renderSessions(defaultCollection.sessions, 'default');
     });
     
     sidebarCollections.appendChild(defaultDiv);
     
     // Render other collections (excluding default)
-    collections.forEach(collection => {
+    collections.filter(c => c.id !== 'default').forEach(collection => {
       const div = document.createElement("div");
       div.className = "collection-item";
       div.textContent = collection.name;
@@ -218,7 +206,7 @@ function renderCollectionsList() {
     // Activate default collection if none are active
     if (!document.querySelector(".collection-item.active")) {
       defaultDiv.classList.add("active");
-      renderSessions(sessions);
+      renderSessions(defaultCollection.sessions, 'default');
     }
   });
 }
@@ -233,9 +221,10 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // Render the main sessions list (for default collection)
-  chrome.storage.local.get("sessions", (data) => {
-    const sessions = data.sessions || [];
-    renderSessions(sessions);
+  chrome.storage.local.get("collections", (data) => {
+    const collections = data.collections || [];
+    const defaultCollection = collections.find(c => c.id === 'default') || { sessions: [] };
+    renderSessions(defaultCollection.sessions, 'default');
   });
 
   // Name editing functionality

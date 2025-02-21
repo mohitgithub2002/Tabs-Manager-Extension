@@ -93,25 +93,15 @@ function saveSessionToCollection(collectionId) {
 }
 
 function saveToCollection(collectionId, session) {
-  chrome.storage.local.get(["collections", "sessions"], (data) => {
-    if (collectionId === "default") {
-      // Handle default collection in sessions array
-      const sessions = data.sessions || [];
-      sessions.push(session);
-      chrome.storage.local.set({ sessions }, () => {
-        alert("Saved to Default Collection!");
+  chrome.storage.local.get("collections", (data) => {
+    const collections = data.collections || [];
+    const collection = collections.find(c => c.id === collectionId);
+    if (collection) {
+      collection.sessions = collection.sessions || [];
+      collection.sessions.push(session);
+      chrome.storage.local.set({ collections }, () => {
+        alert(`Saved to ${collection.name}!`);
       });
-    } else {
-      // Handle other collections
-      const collections = data.collections || [];
-      const collection = collections.find(c => c.id === collectionId);
-      if (collection) {
-        collection.sessions = collection.sessions || [];
-        collection.sessions.push(session);
-        chrome.storage.local.set({ collections }, () => {
-          alert("Saved to collection!");
-        });
-      }
     }
   });
 }
@@ -151,18 +141,13 @@ document.addEventListener("DOMContentLoaded", () => {
         timestamp: new Date().toLocaleString(),
         tabs: [{
           url: currentTab.url,
-          title: currentTab.title
+          title: currentTab.title,
+          favicon: currentTab.favIconUrl || null
         }],
         isSingleTab: true
       };
       
-      chrome.storage.local.get("sessions", (data) => {
-        const sessions = data.sessions || [];
-        sessions.push(session);
-        chrome.storage.local.set({ sessions }, () => {
-          alert("Tab saved!");
-        });
-      });
+      saveToCollection('default', session);
     });
   });
 
@@ -172,31 +157,28 @@ document.addEventListener("DOMContentLoaded", () => {
         timestamp: new Date().toLocaleString(),
         tabs: tabs.map(tab => ({
           url: tab.url,
-          title: tab.title
+          title: tab.title,
+          favicon: tab.favIconUrl || null
         }))
       };
-      chrome.storage.local.get("sessions", (data) => {
-        const sessions = data.sessions || [];
-        sessions.push(session);
-        chrome.storage.local.set({ sessions }, () => {
-          // Close all tabs after saving
-          tabs.forEach(tab => {
-            chrome.tabs.remove(tab.id);
-          });
-          alert("Session saved!");
-        });
+      
+      saveToCollection('default', session);
+      
+      // Close all tabs after saving
+      tabs.forEach(tab => {
+        chrome.tabs.remove(tab.id);
       });
     });
   });
 
   addListener("restoreSession", () => {
-    chrome.storage.local.get("sessions", (data) => {
-      const sessions = data.sessions || [];
-      if (sessions.length === 0) {
+    chrome.storage.local.get("collections", (data) => {
+      const defaultCollection = data.collections.find(c => c.id === 'default');
+      if (!defaultCollection || !defaultCollection.sessions.length) {
         alert("No saved sessions found.");
         return;
       }
-      const lastSession = sessions[sessions.length - 1];
+      const lastSession = defaultCollection.sessions[defaultCollection.sessions.length - 1];
       lastSession.tabs.forEach((tabData) => {
         chrome.tabs.create({ url: tabData.url });
       });

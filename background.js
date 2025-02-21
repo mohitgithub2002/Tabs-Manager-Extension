@@ -42,13 +42,16 @@ chrome.tabs.onCreated.addListener((tab) => {
 // Add installation handler
 chrome.runtime.onInstalled.addListener((details) => {
   if (details.reason === "install") {
-    // Initialize storage with empty arrays
+    // Initialize storage with default collection
     chrome.storage.local.set({
-      sessions: [],
-      collections: [], // Remove default collection from here
+      collections: [{
+        id: 'default',
+        name: 'Default Collection',
+        sessions: []
+      }],
       username: 'Guest'
     }, () => {
-      console.log('Storage initialized');
+      console.log('Storage initialized with default collection');
     });
   }
 });
