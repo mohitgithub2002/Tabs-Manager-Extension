@@ -100,10 +100,31 @@ function renderSessions(sessions) {
   }
   
 function renderCollectionsList() {
-  chrome.storage.local.get("collections", (data) => {
+  chrome.storage.local.get(["collections", "sessions"], (data) => {
     const collections = data.collections || [];
+    const sessions = data.sessions || [];
     const sidebarCollections = document.getElementById("sidebarCollections");
     
+    // Clear existing content
+    sidebarCollections.innerHTML = "";
+    
+    // Add default collection first
+    const defaultDiv = document.createElement("div");
+    defaultDiv.className = "collection-item";
+    defaultDiv.dataset.id = "default";
+    defaultDiv.textContent = "Default Collection";
+    
+    defaultDiv.addEventListener("click", () => {
+      document.querySelectorAll(".collection-item").forEach(item => {
+        item.classList.remove("active");
+      });
+      defaultDiv.classList.add("active");
+      renderSessions(sessions); // Render default sessions
+    });
+    
+    sidebarCollections.appendChild(defaultDiv);
+    
+    // Then render other collections
     collections.forEach(collection => {
       const div = document.createElement("div");
       div.className = "collection-item";
@@ -120,6 +141,12 @@ function renderCollectionsList() {
       
       sidebarCollections.appendChild(div);
     });
+
+    // Set default collection as active initially
+    if (!document.querySelector(".collection-item.active")) {
+      defaultDiv.classList.add("active");
+      renderSessions(sessions);
+    }
   });
 }
 
