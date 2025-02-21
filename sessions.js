@@ -110,6 +110,25 @@ function renderSessions(sessions, collectionId = 'default') {
       const tabCard = document.createElement("div");
       tabCard.className = "tab-card";
 
+      // Create favicon container
+      const faviconContainer = document.createElement("div");
+      faviconContainer.className = "tab-favicon";
+      
+      // Add favicon image or fallback icon
+      if (tab.favicon) {
+        const faviconImg = document.createElement("img");
+        faviconImg.src = tab.favicon;
+        faviconImg.onerror = () => {
+          faviconImg.src = 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y=".9em" font-size="90">🌐</text></svg>';
+        };
+        faviconContainer.appendChild(faviconImg);
+      } else {
+        faviconContainer.innerHTML = '🌐'; // Fallback emoji
+      }
+      
+      // Add favicon container to card
+      tabCard.appendChild(faviconContainer);
+
       // Title
       const tabTitle = document.createElement("div");
       tabTitle.className = "tab-title";

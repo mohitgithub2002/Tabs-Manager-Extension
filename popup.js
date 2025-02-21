@@ -62,7 +62,8 @@ function saveTabToCollection(collectionId) {
       timestamp: new Date().toLocaleString(),
       tabs: [{
         url: currentTab.url,
-        title: currentTab.title
+        title: currentTab.title,
+        favicon: currentTab.favIconUrl || null // Add favicon URL
       }],
       isSingleTab: true
     };
@@ -77,7 +78,8 @@ function saveSessionToCollection(collectionId) {
       timestamp: new Date().toLocaleString(),
       tabs: tabs.map(tab => ({
         url: tab.url,
-        title: tab.title
+        title: tab.title,
+        favicon: tab.favIconUrl || null // Add favicon URL
       }))
     };
     
