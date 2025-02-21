@@ -1,0 +1,23 @@
+{
+    "manifest_version": 3,
+    "name": "Personal Tab Manager",
+    "version": "1.0",
+    "description": "A custom tab management tool for personal use.",
+    "icons": {
+      "128": "logo.png"
+    },
+    "permissions": [
+      "tabs",
+      "storage",
+      "activeTab",
+      "tabGroups"
+    ],
+    "action": {
+      "default_popup": "popup.html",
+      "default_icon": "logo.png"
+    },
+    "background": {
+      "service_worker": "background.js"
+    }
+  }
+  
