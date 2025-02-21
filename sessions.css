@@ -162,3 +162,61 @@
   html {
     scroll-behavior: smooth;
   }
+
+  /* User name section styles */
+  .user-section {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 10px;
+  }
+  
+  #displayName {
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: #90caf9;
+  }
+  
+  .edit-name-btn {
+    background: none;
+    border: none;
+    color: #ffffff;
+    cursor: pointer;
+    font-size: 1rem;
+    padding: 4px 8px;
+    border-radius: 4px;
+  }
+  
+  .edit-name-btn:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+  
+  .name-edit-container {
+    display: flex;
+    gap: 8px;
+  }
+  
+  .name-edit-container.hidden {
+    display: none;
+  }
+  
+  #nameInput {
+    background-color: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+    color: white;
+    padding: 4px 8px;
+  }
+  
+  #saveNameBtn {
+    background-color: #2196f3;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 4px 12px;
+    cursor: pointer;
+  }
+  
+  #saveNameBtn:hover {
+    background-color: #1976d2;
+  }

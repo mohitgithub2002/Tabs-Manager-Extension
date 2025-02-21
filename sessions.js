@@ -99,9 +99,44 @@ function renderSessions(sessions) {
   }
   
   document.addEventListener("DOMContentLoaded", () => {
-    // Load sessions from storage and render them
+    // Load username from storage
+    chrome.storage.local.get("username", (data) => {
+      if (data.username) {
+        document.getElementById("displayName").textContent = data.username;
+      }
+    });
+  
+    // Load and render sessions
     chrome.storage.local.get("sessions", (data) => {
       const sessions = data.sessions || [];
       renderSessions(sessions);
+    });
+  
+    // User name editing functionality
+    const editNameBtn = document.getElementById("editNameBtn");
+    const nameEditContainer = document.getElementById("nameEditContainer");
+    const nameInput = document.getElementById("nameInput");
+    const saveNameBtn = document.getElementById("saveNameBtn");
+    const displayName = document.getElementById("displayName");
+  
+    editNameBtn.addEventListener("click", () => {
+      nameEditContainer.classList.remove("hidden");
+      nameInput.value = displayName.textContent;
+      nameInput.focus();
+    });
+  
+    saveNameBtn.addEventListener("click", () => {
+      const newName = nameInput.value.trim();
+      if (newName) {
+        displayName.textContent = newName;
+        chrome.storage.local.set({ username: newName });
+        nameEditContainer.classList.add("hidden");
+      }
+    });
+  
+    nameInput.addEventListener("keypress", (e) => {
+      if (e.key === "Enter") {
+        saveNameBtn.click();
+      }
     });
   });
