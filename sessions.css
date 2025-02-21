@@ -1,0 +1,164 @@
+/* sessions.css */
+
+/* Reset/Box-sizing */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  body {
+    background-color: #121212;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    color: #e0e0e0;
+    padding: 30px;
+  }
+  
+  header {
+    background-color: rgba(42, 42, 42, 0.7);
+    backdrop-filter: blur(10px);
+    padding: 20px;
+    border-radius: 12px;
+    position: sticky;
+    top: 20px;
+    z-index: 100;
+    margin-bottom: 30px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  header h1 {
+    font-size: 1.6rem;
+    font-weight: 600;
+  }
+  
+  .header-actions {
+    display: flex;
+    gap: 10px;
+  }
+  
+  .header-actions button {
+    background-color: #3d3d3d;
+    color: #ffffff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 500;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.2s;
+  }
+  
+  .header-actions button:hover {
+    background-color: #4a4a4a;
+    transform: translateY(-1px);
+    transition: all 0.2s ease;
+  }
+  
+  /* Container for sessions list */
+  #sessionsList {
+    /* Optionally, set a max-width: */
+       max-width: 900px;
+       margin: 0 auto;
+   
+  }
+  
+  /* Each session container */
+  .session-group {
+    background-color: rgba(42, 42, 42, 0.5);
+    border-radius: 16px;
+    padding: 20px;
+    margin-bottom: 30px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Session header: date/time + optional restore button */
+  .session-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 10px;
+  }
+  
+  .session-date {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #ffffff;
+  }
+  
+  /* Restore button styling */
+  .restore-btn {
+    background-color: #2196f3;
+    color: #fff;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    font-weight: 500;
+    box-shadow: 0 2px 4px rgba(33, 150, 243, 0.3);
+    transition: all 0.2s ease;
+  }
+  
+  .restore-btn:hover {
+    background-color: #1976d2;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(33, 150, 243, 0.4);
+  }
+  
+  /* Container for the tab cards within each session */
+  .tabs-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    padding: 10px 0;
+  }
+  
+  /* Individual tab card */
+  .tab-card {
+    background-color: rgba(255, 255, 255, 0.05);
+    width: 220px;
+    min-height: 80px;
+    border-radius: 12px;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    cursor: pointer;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    transition: all 0.2s ease;
+  }
+  
+  .tab-card:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  }
+  
+  .tab-title {
+    font-size: 1rem;
+    font-weight: 500;
+    margin-bottom: 8px;
+    color: #ffffff;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+  
+  .tab-link {
+    font-size: 0.9rem;
+    color: #90caf9;
+    text-decoration: none;
+    overflow-wrap: break-word;
+  }
+  
+  .tab-link:hover {
+    text-decoration: underline;
+  }
+
+  /* Add smooth scrolling to the page */
+  html {
+    scroll-behavior: smooth;
+  }
