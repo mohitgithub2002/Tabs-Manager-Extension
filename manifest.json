@@ -6,6 +6,9 @@
     "icons": {
       "128": "logo.png"
     },
+    "externally_connectable": {
+      "matches": ["*://localhost:*/*", "*://tabs.revenuelogy.com/*","http://localhost:3000/*"]
+    },
     "permissions": [
       "tabs",
       "storage",

@@ -22,23 +22,6 @@ chrome.tabs.onCreated.addListener((tab) => {
   // You can add additional logic here to update sessions automatically.
 });
 
-// Add tab event listeners
-chrome.tabs.onCreated.addListener((tab) => {
-    console.log("Tab created:", tab);
-    // You can add additional logic here to update sessions automatically.
-  });
-  
-  chrome.tabs.onRemoved.addListener((tabId, removeInfo) => {
-    console.log("Tab removed:", tabId, removeInfo);
-    // Update saved session if needed.
-  });
-  
-  chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
-    if (changeInfo.status === "complete") {
-      console.log("Tab updated:", tab);
-    }
-  });
-
 // Add installation handler
 chrome.runtime.onInstalled.addListener((details) => {
   if (details.reason === "install") {
@@ -53,5 +36,17 @@ chrome.runtime.onInstalled.addListener((details) => {
     }, () => {
       console.log('Storage initialized with default collection');
     });
+  }
+});
+
+chrome.runtime.onMessageExternal.addListener((message, sender, sendResponse) => {
+  if (message.action === "store_token") {
+    const sessionsUrl = chrome.runtime.getURL('sessions.html');
+    chrome.storage.local.set({ 'data': message.data }, function() {
+      console.log("Token stored successfully");
+      chrome.tabs.update({ url: sessionsUrl });
+      sendResponse({ status: "success" });
+    });
+    return true; // Indicating that the response is async
   }
 });
