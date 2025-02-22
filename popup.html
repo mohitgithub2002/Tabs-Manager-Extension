@@ -18,20 +18,27 @@
     
     <!-- Collections List -->
     <section id="collections">
-      <h2 style="font-size: large; color: rgb(14, 11, 11);">Quick Save</h2>
-      <div id="collectionsList">
+      <h2>Collections</h2>
+      <div id="collectionsList" class="collections-grid">
         <!-- Collections will be rendered here -->
       </div>
-      <div id="newCollectionForm" class="hidden">
-        <input type="text" id="newCollectionInput" placeholder="Collection name">
+      <div id="newCollectionForm" class="new-collection-form hidden">
+        <input 
+          type="text" 
+          id="newCollectionInput" 
+          placeholder="Collection name"
+          maxlength="50"
+        >
         <div class="form-buttons">
-          <button id="saveCollectionBtn">Save</button>
+          <button id="saveCollectionBtn" class="primary">Save</button>
           <button id="cancelCollectionBtn">Cancel</button>
         </div>
       </div>
-      <button id="newCollectionBtn">+ Create New Collection</button>
+      <button id="newCollectionBtn" class="new-collection-btn">
+        + New Collection
+      </button>
     </section>
     
-    <script src="popup.js"></script>
+    <script type="module" src="popup.js"></script>
   </body>
 </html>
