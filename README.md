@@ -1,24 +1,26 @@
-# Personal Tab Manager Chrome Extension
+# Revenuelogy Tab Manager
 
-A powerful Chrome extension for managing browser tabs and sessions, inspired by Toby. This extension helps you organize, save, and restore your browser tabs efficiently.
+A powerful Chrome extension for managing browser tabs and sessions. This extension helps teams organize, save, and restore browser tabs efficiently.
 
 ## Features
 
-- **Save Individual Tabs**: Quickly save any tab for later reference
-- **Session Management**: 
+- **Quick Save Actions**:
+  - Save individual tabs
   - Save entire window sessions
-  - Restore previously saved sessions with one click
-  - View detailed session history with timestamps
+  - Auto-close tabs after saving sessions
 - **Collections**:
-  - Organize tabs and sessions into custom collections
-  - Default collection for quick saves
-  - Create multiple collections for different purposes
-- **Tab Grouping**: Group your current tabs into a managed set
-- **User Personalization**: Customize your display name
-- **Clean Interface**:
-  - Dark mode UI
-  - Card-based session view
-  - Intuitive navigation
+  - Create custom collections
+  - Organize tabs by project or theme
+  - Easy switching between collections
+- **Session Management**:
+  - View session history with timestamps
+  - Restore entire sessions with one click
+  - Delete individual sessions
+- **User Experience**:
+  - Clean, modern interface
+  - Customizable display name
+  - Quick access popup
+  - Detailed sessions view
 
 ## Installation
 

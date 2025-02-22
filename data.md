@@ -1,6 +1,8 @@
 # Data Structure Documentation
 
-This document outlines the data structures used in the Chrome extension's local storage.
+## Chrome Storage Schema
+
+### Authentication Data
 
 ## Storage Overview
 
@@ -143,3 +145,9 @@ The extension performs these main operations on the data:
 - All data is automatically persisted by Chrome's storage API
 - Data survives browser restarts
 - Data syncs across devices if using `chrome.storage.sync` (future feature)
+
+## API Endpoints Overview
+
+The extension interacts with a backend server at `http://localhost:3000/api` with the following endpoints:
+
+### Collections Endpoints
