@@ -22,12 +22,7 @@ chrome.runtime.onStartup.addListener(async () => {
   
   if (!isAuthenticated) {
     redirectToAuth();
-  } else {
-    chrome.tabs.create({
-      url: sessionsUrl,
-      active: true
-    });
-  }
+  } 
 });
 
 // Modified tab event listeners

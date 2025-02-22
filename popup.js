@@ -18,8 +18,13 @@ async function renderCollections() {
       collectionsList.innerHTML = '<div class="empty-state">No collections yet</div>';
       return;
     }
+
+    // Sort collections based on their ID (timestamp)
+    const sortedCollections = [...collections].sort((b, a) => {
+      return parseInt(b.id) - parseInt(a.id);
+    });
     
-    collections.forEach(collection => {
+    sortedCollections.forEach(collection => {
       const div = createCollectionItem(collection);
       collectionsList.appendChild(div);
     });

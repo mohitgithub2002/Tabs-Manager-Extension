@@ -85,7 +85,12 @@ async function renderCollectionsList() {
     const sidebarCollections = document.getElementById("sidebarCollections");
     sidebarCollections.innerHTML = "";
     
-    collections.forEach(collection => {
+    // Sort collections based on their ID (timestamp)
+    const sortedCollections = [...collections].sort((b, a) => {
+      return parseInt(b.id) - parseInt(a.id);
+    });
+    
+    sortedCollections.forEach(collection => {
       const div = document.createElement("div");
       div.className = "collection-item";
       div.textContent = collection.name;
