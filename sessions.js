@@ -212,7 +212,14 @@ function renderCollectionsList() {
 }
 
 // On DOM load, fetch user name, sessions, and collections
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
+  // Check authentication first
+  const data = await chrome.storage.local.get('data');
+  if (!data || Object.keys(data).length === 0) {
+    window.location.href = 'http://localhost:3000/auth/signin';
+    return;
+  }
+
   // Load username from storage
   chrome.storage.local.get("username", (data) => {
     if (data.username) {

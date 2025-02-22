@@ -1,41 +1,53 @@
 // background.js
 
-// Add startup handler
-chrome.runtime.onStartup.addListener(() => {
-  // Get the extension URL for sessions.html
-  const sessionsUrl = chrome.runtime.getURL('sessions.html');
-  
-  // Create a new tab with sessions.html
-  chrome.tabs.create({
-    url: sessionsUrl,
+// Helper function to check authentication
+async function checkAuthentication() {
+  const data = await chrome.storage.local.get('data');
+  console.log("Auth check data:", data); // Debug log
+  return data && Object.keys(data).length > 0;
+}
+
+// Helper function to redirect to auth page
+function redirectToAuth() {
+  chrome.tabs.update({
+    url: 'http://localhost:3000/auth/signin',
     active: true
   });
-});
+}
 
-// Add tab event listeners
-chrome.tabs.onCreated.addListener((tab) => {
+// Modified startup handler
+chrome.runtime.onStartup.addListener(async () => {
+  const isAuthenticated = await checkAuthentication();
   const sessionsUrl = chrome.runtime.getURL('sessions.html');
-  if (tab.pendingUrl === 'chrome://newtab/' || tab.url === 'chrome://newtab/') {
-    chrome.tabs.update(tab.id, { url: sessionsUrl });
+  
+  if (!isAuthenticated) {
+    redirectToAuth();
+  } else {
+    chrome.tabs.create({
+      url: sessionsUrl,
+      active: true
+    });
   }
-  console.log("Tab created:", tab);
-  // You can add additional logic here to update sessions automatically.
 });
 
-// Add installation handler
+// Modified tab event listeners
+chrome.tabs.onCreated.addListener(async (tab) => {
+  if (tab.pendingUrl === 'chrome://newtab/' || tab.url === 'chrome://newtab/') {
+    const isAuthenticated = await checkAuthentication();
+    const sessionsUrl = chrome.runtime.getURL('sessions.html');
+    
+    if (!isAuthenticated) {
+      redirectToAuth();
+    } else {
+      chrome.tabs.update(tab.id, { url: sessionsUrl });
+    }
+  }
+});
+
+// Modified installation handler
 chrome.runtime.onInstalled.addListener((details) => {
   if (details.reason === "install") {
-    // Initialize storage with default collection
-    chrome.storage.local.set({
-      collections: [{
-        id: 'default',
-        name: 'Default Collection',
-        sessions: []
-      }],
-      username: 'Guest'
-    }, () => {
-      console.log('Storage initialized with default collection');
-    });
+    redirectToAuth();
   }
 });
 
