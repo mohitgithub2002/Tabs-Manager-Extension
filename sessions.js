@@ -8,8 +8,13 @@ import {
 
 async function renderSessions(collectionId) {
   try {
+    if (!collectionId) {
+      console.warn('No collection ID provided');
+      return;
+    }
+    
     // Get data directly from cache
-    const collection = await cache.getCollection(collectionId);
+    const collection = await cache.getCollection(collectionId.toString());
     const sessions = collection?.sessions || [];
     const sessionsList = document.getElementById("sessionsList");
     sessionsList.innerHTML = "";
@@ -57,8 +62,8 @@ async function renderSessions(collectionId) {
         if (confirm("Are you sure you want to delete this session?")) {
           try {
             await deleteSession(collectionId, session.timestamp);
-            const collection = await fetchCollection(collectionId);
-            renderSessions(collection.data.sessions, collectionId);
+            // Simply re-render the current collection's sessions
+            await renderSessions(collectionId);
           } catch (error) {
             console.error('Failed to delete session:', error);
             alert('Failed to delete session. Please try again.');
@@ -76,6 +81,8 @@ async function renderSessions(collectionId) {
     });
   } catch (error) {
     console.error('Failed to render sessions:', error);
+    const sessionsList = document.getElementById("sessionsList");
+    sessionsList.innerHTML = '<div class="error">Failed to load sessions</div>';
   }
 }
 

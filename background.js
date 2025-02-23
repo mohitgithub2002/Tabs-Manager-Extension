@@ -18,18 +18,6 @@ function redirectToAuth() {
   });
 }
 
-function debounce(func, wait) {
-  let timeout;
-  return function executedFunction(...args) {
-    const later = () => {
-      clearTimeout(timeout);
-      func(...args);
-    };
-    clearTimeout(timeout);
-    timeout = setTimeout(later, wait);
-  };
-}
-
 // Event Listeners
 chrome.runtime.onStartup.addListener(async () => {
   const isAuthenticated = await checkAuthentication();
@@ -67,37 +55,4 @@ chrome.runtime.onMessageExternal.addListener((message, sender, sendResponse) => 
     });
     return true;
   }
-});
-
-// Sync management
-const syncToServer = debounce(async () => {
-  try {
-    const userId = await getUserId();
-    const response = await fetch(`${API_BASE_URL}/sync`, {
-      method: 'POST',
-      headers: {
-        'user-id': userId,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ changes: [] })
-    });
-
-    if (response.ok) {
-      console.log('Sync successful');
-    }
-  } catch (error) {
-    console.error('Sync failed:', error);
-  }
-}, 5000);
-
-// Periodic sync
-setInterval(syncToServer, 30000);
-
-// Message handling
-chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-  if (message.type === 'FORCE_SYNC') {
-    syncToServer();
-    sendResponse({ status: 'sync_scheduled' });
-  }
-  return true;
 });
