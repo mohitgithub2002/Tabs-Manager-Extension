@@ -10,7 +10,7 @@ async function checkAuthentication() {
 // Helper function to redirect to auth page
 function redirectToAuth() {
   chrome.tabs.update({
-    url: 'http://localhost:3000/auth/signin',
+    url: 'https://tabs.revenuelogy.com/auth/signin',
     active: true
   });
 }

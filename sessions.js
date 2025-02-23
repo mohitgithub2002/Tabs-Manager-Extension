@@ -121,7 +121,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   // Check authentication
   const data = await chrome.storage.local.get(['data', 'name']);
   if (!data?.data || Object.keys(data.data).length === 0) {
-    window.location.href = 'http://localhost:3000/auth/signin';
+    window.location.href = 'https://tabs.revenuelogy.com/auth/signin';
     return;
   }
 
