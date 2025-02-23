@@ -1,7 +1,8 @@
+const API_BASE_URL = 'https://tabs.revenuelogy.com/api';
+
 // Helper functions
 async function checkAuthentication() {
   const data = await chrome.storage.local.get('data');
-  console.log("Auth check data:", data);
   return data && Object.keys(data).length > 0;
 }
 
