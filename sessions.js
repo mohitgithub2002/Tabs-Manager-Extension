@@ -6,6 +6,41 @@ import {
   createCollection
 } from './api.js';
 
+function formatDate(timestamp) {
+  const date = new Date(timestamp);
+  const today = new Date();
+  const yesterday = new Date(today);
+  yesterday.setDate(yesterday.getDate() - 1);
+
+  // Check if the date is today
+  if (date.toDateString() === today.toDateString()) {
+    return `Today at ${date.toLocaleTimeString('en-US', { 
+      hour: 'numeric', 
+      minute: '2-digit',
+      hour12: true 
+    })}`;
+  }
+  
+  // Check if the date is yesterday
+  if (date.toDateString() === yesterday.toDateString()) {
+    return `Yesterday at ${date.toLocaleTimeString('en-US', { 
+      hour: 'numeric', 
+      minute: '2-digit',
+      hour12: true 
+    })}`;
+  }
+  
+  // For other dates
+  return date.toLocaleDateString('en-US', { 
+    weekday: 'long',
+    month: 'short', 
+    day: 'numeric',
+    hour: 'numeric',
+    minute: '2-digit',
+    hour12: true
+  });
+}
+
 async function renderSessions(collectionId) {
   try {
     if (!collectionId) {
@@ -34,7 +69,8 @@ async function renderSessions(collectionId) {
       
       sessionGroup.innerHTML = `
         <div class="session-header">
-          <div class="session-date">${session.timestamp || "Unknown Date"}</div>
+          <button class="toggle-session" title="Toggle session">▼</button>
+          <div class="session-date">${formatDate(session.timestamp) || "Unknown Date"}</div>
           <div class="session-actions">
             <button class="restore-btn">Restore</button>
             <button class="delete-btn" title="Delete Session">✕</button>
@@ -52,6 +88,15 @@ async function renderSessions(collectionId) {
           `).join('')}
         </div>
       `;
+
+      // Add toggle functionality
+      const toggleBtn = sessionGroup.querySelector(".toggle-session");
+      const tabsContainer = sessionGroup.querySelector(".tabs-container");
+      
+      toggleBtn.addEventListener("click", () => {
+        toggleBtn.classList.toggle("collapsed");
+        tabsContainer.classList.toggle("hidden");
+      });
 
       // Add event listeners
       sessionGroup.querySelector(".restore-btn").addEventListener("click", () => {
