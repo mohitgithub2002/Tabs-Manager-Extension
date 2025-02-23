@@ -1,13 +1,15 @@
-// background.js
-
-// Helper function to check authentication
+// Helper functions
 async function checkAuthentication() {
   const data = await chrome.storage.local.get('data');
-  console.log("Auth check data:", data); // Debug log
+  console.log("Auth check data:", data);
   return data && Object.keys(data).length > 0;
 }
 
-// Helper function to redirect to auth page
+async function getUserId() {
+  const data = await chrome.storage.local.get('data');
+  return data?.data?.['user-id'];
+}
+
 function redirectToAuth() {
   chrome.tabs.update({
     url: 'https://tabs.revenuelogy.com/auth/signin',
@@ -15,17 +17,26 @@ function redirectToAuth() {
   });
 }
 
-// Modified startup handler
+function debounce(func, wait) {
+  let timeout;
+  return function executedFunction(...args) {
+    const later = () => {
+      clearTimeout(timeout);
+      func(...args);
+    };
+    clearTimeout(timeout);
+    timeout = setTimeout(later, wait);
+  };
+}
+
+// Event Listeners
 chrome.runtime.onStartup.addListener(async () => {
   const isAuthenticated = await checkAuthentication();
-  const sessionsUrl = chrome.runtime.getURL('sessions.html');
-  
   if (!isAuthenticated) {
     redirectToAuth();
-  } 
+  }
 });
 
-// Modified tab event listeners
 chrome.tabs.onCreated.addListener(async (tab) => {
   if (tab.pendingUrl === 'chrome://newtab/' || tab.url === 'chrome://newtab/') {
     const isAuthenticated = await checkAuthentication();
@@ -39,7 +50,6 @@ chrome.tabs.onCreated.addListener(async (tab) => {
   }
 });
 
-// Modified installation handler
 chrome.runtime.onInstalled.addListener((details) => {
   if (details.reason === "install") {
     redirectToAuth();
@@ -54,6 +64,39 @@ chrome.runtime.onMessageExternal.addListener((message, sender, sendResponse) => 
       chrome.tabs.update({ url: sessionsUrl });
       sendResponse({ status: "success" });
     });
-    return true; // Indicating that the response is async
+    return true;
   }
+});
+
+// Sync management
+const syncToServer = debounce(async () => {
+  try {
+    const userId = await getUserId();
+    const response = await fetch(`${API_BASE_URL}/sync`, {
+      method: 'POST',
+      headers: {
+        'user-id': userId,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ changes: [] })
+    });
+
+    if (response.ok) {
+      console.log('Sync successful');
+    }
+  } catch (error) {
+    console.error('Sync failed:', error);
+  }
+}, 5000);
+
+// Periodic sync
+setInterval(syncToServer, 30000);
+
+// Message handling
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  if (message.type === 'FORCE_SYNC') {
+    syncToServer();
+    sendResponse({ status: 'sync_scheduled' });
+  }
+  return true;
 });

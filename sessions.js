@@ -1,3 +1,4 @@
+import { cache } from './services/cache.js';
 import {
   fetchCollections,
   fetchCollection,
@@ -5,70 +6,77 @@ import {
   createCollection
 } from './api.js';
 
-async function renderSessions(sessions, collectionId) {
-  const sessionsList = document.getElementById("sessionsList");
-  sessionsList.innerHTML = "";
+async function renderSessions(collectionId) {
+  try {
+    // Get data directly from cache
+    const collection = await cache.getCollection(collectionId);
+    const sessions = collection?.sessions || [];
+    const sessionsList = document.getElementById("sessionsList");
+    sessionsList.innerHTML = "";
 
-  if (!sessions || sessions.length === 0) {
-    sessionsList.innerHTML = '<div class="empty-state">No saved sessions.</div>';
-    return;
-  }
+    if (!sessions || sessions.length === 0) {
+      sessionsList.innerHTML = '<div class="empty-state">No saved sessions.</div>';
+      return;
+    }
 
-  const sortedSessions = [...sessions].sort((a, b) => {
-    return new Date(b.timestamp) - new Date(a.timestamp);
-  });
+    const sortedSessions = [...sessions].sort((a, b) => {
+      return new Date(b.timestamp) - new Date(a.timestamp);
+    });
 
-  sortedSessions.forEach((session) => {
-    const sessionGroup = document.createElement("div");
-    sessionGroup.className = "session-group";
-    
-    sessionGroup.innerHTML = `
-      <div class="session-header">
-        <div class="session-date">${session.timestamp || "Unknown Date"}</div>
-        <div class="session-actions">
-          <button class="restore-btn">Restore</button>
-          <button class="delete-btn" title="Delete Session">✕</button>
-        </div>
-      </div>
-      <div class="tabs-container">
-        ${session.tabs.map(tab => `
-          <div class="tab-card" title="${tab.url}">
-            <div class="tab-favicon">${tab.favicon ? 
-              `<img src="${tab.favicon}" onerror="this.src='data:image/svg+xml,<svg xmlns=\\'http://www.w3.org/2000/svg\\' viewBox=\\'0 0 100 100\\'><text y=\\'.9em\\' font-size=\\'90\\'>🌐</text></svg>';">` : 
-              '🌐'}</div>
-            <div class="tab-title">${tab.title || "Untitled"}</div>
-            <div class="tab-link">${tryGetHostname(tab.url)}</div>
+    sortedSessions.forEach((session) => {
+      const sessionGroup = document.createElement("div");
+      sessionGroup.className = "session-group";
+      
+      sessionGroup.innerHTML = `
+        <div class="session-header">
+          <div class="session-date">${session.timestamp || "Unknown Date"}</div>
+          <div class="session-actions">
+            <button class="restore-btn">Restore</button>
+            <button class="delete-btn" title="Delete Session">✕</button>
           </div>
-        `).join('')}
-      </div>
-    `;
+        </div>
+        <div class="tabs-container">
+          ${session.tabs.map(tab => `
+            <div class="tab-card" title="${tab.url}">
+              <div class="tab-favicon">${tab.favicon ? 
+                `<img src="${tab.favicon}" onerror="this.src='data:image/svg+xml,<svg xmlns=\\'http://www.w3.org/2000/svg\\' viewBox=\\'0 0 100 100\\'><text y=\\'.9em\\' font-size=\\'90\\'>🌐</text></svg>';">` : 
+                '🌐'}</div>
+              <div class="tab-title">${tab.title || "Untitled"}</div>
+              <div class="tab-link">${tryGetHostname(tab.url)}</div>
+            </div>
+          `).join('')}
+        </div>
+      `;
 
-    // Add event listeners
-    sessionGroup.querySelector(".restore-btn").addEventListener("click", () => {
-      session.tabs.forEach(tab => chrome.tabs.create({ url: tab.url }));
-    });
-
-    sessionGroup.querySelector(".delete-btn").addEventListener("click", async () => {
-      if (confirm("Are you sure you want to delete this session?")) {
-        try {
-          await deleteSession(collectionId, session.timestamp);
-          const collection = await fetchCollection(collectionId);
-          renderSessions(collection.data.sessions, collectionId);
-        } catch (error) {
-          console.error('Failed to delete session:', error);
-          alert('Failed to delete session. Please try again.');
-        }
-      }
-    });
-
-    sessionGroup.querySelectorAll(".tab-card").forEach((card, index) => {
-      card.addEventListener("click", () => {
-        chrome.tabs.create({ url: session.tabs[index].url });
+      // Add event listeners
+      sessionGroup.querySelector(".restore-btn").addEventListener("click", () => {
+        session.tabs.forEach(tab => chrome.tabs.create({ url: tab.url }));
       });
-    });
 
-    sessionsList.appendChild(sessionGroup);
-  });
+      sessionGroup.querySelector(".delete-btn").addEventListener("click", async () => {
+        if (confirm("Are you sure you want to delete this session?")) {
+          try {
+            await deleteSession(collectionId, session.timestamp);
+            const collection = await fetchCollection(collectionId);
+            renderSessions(collection.data.sessions, collectionId);
+          } catch (error) {
+            console.error('Failed to delete session:', error);
+            alert('Failed to delete session. Please try again.');
+          }
+        }
+      });
+
+      sessionGroup.querySelectorAll(".tab-card").forEach((card, index) => {
+        card.addEventListener("click", () => {
+          chrome.tabs.create({ url: session.tabs[index].url });
+        });
+      });
+
+      sessionsList.appendChild(sessionGroup);
+    });
+  } catch (error) {
+    console.error('Failed to render sessions:', error);
+  }
 }
 
 function tryGetHostname(url) {
@@ -81,11 +89,11 @@ function tryGetHostname(url) {
 
 async function renderCollectionsList() {
   try {
-    const { data: collections } = await fetchCollections();
+    // Get collections directly from cache
+    const collections = await cache.getCollections();
     const sidebarCollections = document.getElementById("sidebarCollections");
     sidebarCollections.innerHTML = "";
     
-    // Sort collections based on their ID (timestamp)
     const sortedCollections = [...collections].sort((b, a) => {
       return parseInt(b.id) - parseInt(a.id);
     });
@@ -96,13 +104,12 @@ async function renderCollectionsList() {
       div.textContent = collection.name;
       div.dataset.id = collection.id;
       
-      div.addEventListener("click", async () => {
+      div.addEventListener("click", () => {
         document.querySelectorAll(".collection-item").forEach(item => {
           item.classList.remove("active");
         });
         div.classList.add("active");
-        const collectionData = await fetchCollection(collection.id);
-        renderSessions(collectionData.data.sessions, collection.id);
+        renderSessions(collection.id);
       });
       
       sidebarCollections.appendChild(div);
@@ -113,7 +120,35 @@ async function renderCollectionsList() {
     if (firstCollection) firstCollection.click();
   } catch (error) {
     console.error('Failed to fetch collections:', error);
-    alert('Failed to load collections. Please try again.');
+  }
+}
+
+async function hardRefresh() {
+  const refreshBtn = document.getElementById("refreshBtn");
+  refreshBtn.classList.add("spinning");
+  
+  try {
+    // Clear cache
+    await cache.collections.clear();
+    await cache.sessions.clear();
+    
+    // Fetch fresh data
+    const response = await fetchCollections();
+    await cache.initializeCache(response.data);
+    
+    // Re-render collections
+    await renderCollectionsList();
+    
+    // Re-render active collection if any
+    const activeCollection = document.querySelector(".collection-item.active");
+    if (activeCollection) {
+      renderSessions(activeCollection.dataset.id);
+    }
+  } catch (error) {
+    console.error('Hard refresh failed:', error);
+    alert('Failed to refresh. Please try again.');
+  } finally {
+    refreshBtn.classList.remove("spinning");
   }
 }
 
@@ -170,11 +205,14 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (!name) return;
 
     try {
-      await createCollection({
+      const collectionData = {
         id: Date.now().toString(),
         name,
         sessions: []
-      });
+      };
+
+      await createCollection(collectionData);
+      // Immediately re-render the collections list
       await renderCollectionsList();
       newCollectionForm.classList.add("hidden");
       newCollectionInput.value = "";
@@ -188,4 +226,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     newCollectionForm.classList.add("hidden");
     newCollectionInput.value = "";
   });
+
+  // Add refresh button handler
+  const refreshBtn = document.getElementById("refreshBtn");
+  refreshBtn.addEventListener("click", hardRefresh);
 });

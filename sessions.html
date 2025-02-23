@@ -12,6 +12,8 @@
   >
   <!-- Link to the CSS file -->
   <link rel="stylesheet" href="sessions.css">
+  <!-- Replace CDN with local Dexie -->
+  <script src="lib/dexie.min.js"></script>
 </head>
 <body>
   <div class="layout">
@@ -36,6 +38,7 @@
       <header>
         <h1>Revenuelogy Tabs Collection</h1>
         <div class="user-section">
+          <button id="refreshBtn" class="refresh-btn" title="Refresh Collections">🔄</button>
           <span id="displayName">Guest</span>
           <button id="editNameBtn" class="edit-name-btn">✎</button>
           <div id="nameEditContainer" class="name-edit-container hidden">
