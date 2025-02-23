@@ -1,4 +1,4 @@
-const API_BASE_URL = 'https://tabs.revenuelogy.com/';
+const API_BASE_URL = 'https://tabs.revenuelogy.com/api';
 
 // Helper to get user ID from storage
 async function getUserId() {
